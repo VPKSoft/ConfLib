@@ -6,13 +6,13 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://www.gnu.org/licenses/lgpl.txt</licenseUrl>
     <projectUrl>https://www.vpksoft.net/2015-03-31-13-33-28/libraries/conflib</projectUrl>
     <iconUrl>https://www.vpksoft.net/site/VPKSoft.ico</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Updated SQLite dependency.</releaseNotes>
-    <copyright>Copyright © VPKSoft 2018</copyright>
+    <copyright>Copyright © VPKSoft 2019</copyright>
     <tags>Conflib VPKSoft configuration application</tags>
+    <license type="expression">LGPL-3.0-or-later</license>
   </metadata>
 </package>
