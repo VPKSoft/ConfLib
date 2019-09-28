@@ -24,8 +24,6 @@ along with ConfLib.  If not, see <http://www.gnu.org/licenses/>.
 */
 #endregion
 
-using System;
-using System.ComponentModel;
 using System.Drawing;
 using PropertyChanged;
 using VPKSoft.ConfLib;
@@ -51,7 +49,7 @@ namespace ConfLibTest
         }
 
         [SettingAttribute("text", typeof(string))]
-        public string Text { get; set; } = "ConfLibTest  © VPKSoft";
+        internal string Text { get; set; } = "ConfLibTest  © VPKSoft";
 
         [SettingAttribute("Year", typeof(string))]
         internal string Year { get; set; } = "2019";
@@ -74,10 +72,11 @@ namespace ConfLibTest
         [SettingAttribute("nonPrimitiveType/favoriteColor", typeof(Color))]
         internal Color FavoriteColor { get; set; } = Color.DarkCyan;
 
+        // this is required for the base class event to be available for subscription..
         public override event OnRequestTypeConverter RequestTypeConverter
         {
-            add { base.RequestTypeConverter += value; }
-            remove { base.RequestTypeConverter -= value; }
+            add => base.RequestTypeConverter += value;
+            remove => base.RequestTypeConverter -= value;
         }
     }
 }

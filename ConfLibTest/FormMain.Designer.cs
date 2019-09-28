@@ -93,7 +93,7 @@
             this.cbCoding.Name = "cbCoding";
             this.cbCoding.Size = new System.Drawing.Size(271, 17);
             this.cbCoding.TabIndex = 5;
-            this.cbCoding.Text = "I can code like no one else (meens good/bad/ugly)!";
+            this.cbCoding.Text = "I can code like no one else (means good/bad/ugly)!";
             this.cbCoding.UseVisualStyleBackColor = true;
             // 
             // gbGender
