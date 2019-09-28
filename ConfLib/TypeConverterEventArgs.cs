@@ -25,21 +25,25 @@ along with ConfLib.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
 using System;
-using System.Windows.Forms;
+using System.ComponentModel;
 
-namespace ConfLibTest
+namespace VPKSoft.ConfLib
 {
-    static class Program
+    /// <summary>
+    /// Event arguments for requesting a type converter for a given type.
+    /// Implements the <see cref="System.EventArgs" />
+    /// </summary>
+    /// <seealso cref="System.EventArgs" />
+    public class TypeConverterEventArgs: EventArgs
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the type converter.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public TypeConverter Converter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type for the type converter.
+        /// </summary>
+        public Type TypeOfConverter { get; set; }
     }
 }

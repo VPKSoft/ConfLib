@@ -3,7 +3,7 @@
 ConfLib
 
 A library for storing application setting into a SQLite database.
-Copyright (C) 2015 VPKSoft, Petteri Kautonen
+Copyright (C) 2019 VPKSoft, Petteri Kautonen
 
 Contact: vpksoft@vpksoft.net
 
@@ -28,11 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Data.SQLite;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 
 namespace VPKSoft.ConfLib
@@ -50,24 +48,20 @@ namespace VPKSoft.ConfLib
         /// <summary>
         /// The file name to save the configuration into.
         /// </summary>
-        private string dbName = "config.sqlite";
+        // ReSharper disable once StringLiteralTypo
+        private string dbName = @"config.sqlite";
 
         /// <summary>
-        /// If the configuration entries should be automatically saved to the database.
+        /// The SQLite database connection to use.
         /// </summary>
-        private bool autoCreate = false;
-
-        /// <summary>
-        /// The SQlite database connection to use.
-        /// </summary>
-        private SQLiteConnection conn = null;
+        private SQLiteConnection conn;
 
         /// <summary>
         /// An internal cache where the configuration entries are held.
         /// <para/>This is for reading only. Writing is done immediately depending
         /// <para/>on the caching of the file system and SQLite database.
         /// </summary>
-        private List<KeyValuePair<string, string>> configCache = new List<KeyValuePair<string, string>>();
+        private readonly List<KeyValuePair<string, string>> configCache = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Just returns the default writable data directory for "non-roaming" applications.
@@ -96,8 +90,8 @@ namespace VPKSoft.ConfLib
         /// <summary>
         /// Encrypts a string starting with "SECURE:" to a hex string.
         /// </summary>
-        /// <param name="data">A string to encypt.</param>
-        /// <returns>A string encrypeted as hex string if it started with "SECURE:"</returns>
+        /// <param name="data">A string to encrypt.</param>
+        /// <returns>A string encrypted as hex string if it started with "SECURE:"</returns>
         public static string ProtectData(string data)        
         {
             if (data == null)
@@ -119,7 +113,7 @@ namespace VPKSoft.ConfLib
             {
                 return data;
             }
-            byte[] bData = UTF8Encoding.UTF8.GetBytes(data.ToCharArray());            
+            byte[] bData = Encoding.UTF8.GetBytes(data.ToCharArray());            
             bData = ProtectedData.Protect(bData, null, DataProtectionScope.CurrentUser);
             string hex = BitConverter.ToString(bData);
             return "0x" + hex.Replace("-", "");
@@ -129,7 +123,17 @@ namespace VPKSoft.ConfLib
         /// Decrypts a string starting with "0x" to a normal string.
         /// </summary>
         /// <param name="data">A data to decrypt.</param>
-        /// <returns>A string decrypeted from a hex string.</returns>
+        /// <returns>A string decrypted from a hex string.</returns>
+        public static string UnProtectData(string data) // overload to fix a typo..
+        {
+            return UnprotectData(data);
+        }
+
+        /// <summary>
+        /// Decrypts a string starting with "0x" to a normal string.
+        /// </summary>
+        /// <param name="data">A data to decrypt.</param>
+        /// <returns>A string decrypted from a hex string.</returns>
         public static string UnprotectData(string data)
         {
             if (data == null)
@@ -151,14 +155,14 @@ namespace VPKSoft.ConfLib
             {
                 return data;
             }
-            data.Replace("0x", string.Empty);
+
             byte[] bData = StringToByteArray(data);
             bData = ProtectedData.Unprotect(bData, null, DataProtectionScope.CurrentUser);
-            return System.Text.UTF8Encoding.UTF8.GetString(bData);
+            return Encoding.UTF8.GetString(bData);
         }
 
         /// <summary>
-        /// Convers a hex string to a a byte array.
+        /// Converts a hex string to a a byte array.
         /// </summary>
         /// <param name="hex">A hex string to convert.</param>
         /// <returns>A byte array which has been converted from a hex string.</returns>
@@ -179,10 +183,7 @@ namespace VPKSoft.ConfLib
         /// </summary>
         public string DataDir
         {
-            get
-            {
-                return dataDir;
-            }
+            get => dataDir;
 
             set
             {
@@ -201,16 +202,15 @@ namespace VPKSoft.ConfLib
             }
         }
 
+        // ReSharper disable once CommentTypo
         /// <summary>
         /// Gets or sets the SQLite database file name residing in DataDir.
         /// <para/>The default is config.sqlite.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public string DBName
         {
-            get
-            {
-                return dbName;
-            }
+            get => dbName;
 
             set
             {
@@ -230,31 +230,14 @@ namespace VPKSoft.ConfLib
         /// <summary>
         /// Gets the combination of DataDir and DBName as a full file name and path.
         /// </summary>
-        public string ConfigFile
-        {
-            get
-            {
-                return dataDir + dbName;
-            }
-        }
+        public string ConfigFile => dataDir + dbName;
 
         /// <summary>
         /// Indicates if the library should automatically create settings
         /// <para/>in to the database whether their exist or not.
         /// <para/>This appends to querying or creating a setting.
         /// </summary>
-        public bool AutoCreateSettings
-        {
-            get
-            {
-                return autoCreate;
-            }
-            
-            set
-            {
-                autoCreate = value;
-            }
-        }
+        public bool AutoCreateSettings { get; set; }
 
         /// <summary>
         /// Opens the database in case it hasn't been opened yet.
@@ -285,7 +268,8 @@ namespace VPKSoft.ConfLib
             List<string> tables = new List<string>();
             using (SQLiteCommand command = new SQLiteCommand(conn))
             {
-                                      // SQLite strings are case sensitive (except in like and COLLATE NOCASE ?.)...
+                // ReSharper disable once CommentTypo
+                // SQLite strings are case sensitive (except in like and COLLATE NOCASE ?.)...
                 command.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table' ";
                 using (SQLiteDataReader dr = command.ExecuteReader())
                 {
@@ -302,7 +286,7 @@ namespace VPKSoft.ConfLib
                     {
                         while (dr.Read())
                         {
-                            configCache.Add(new KeyValuePair<string, string>(tbl + "/" + dr[0].ToString(), dr.IsDBNull(1) ? null : UnprotectData(dr[1].ToString())));
+                            configCache.Add(new KeyValuePair<string, string>(tbl + "/" + dr[0], dr.IsDBNull(1) ? null : UnProtectData(dr[1].ToString())));
                         }
                     }
                 }
@@ -314,7 +298,7 @@ namespace VPKSoft.ConfLib
         /// <para/>Only alphanumeric characters and the underscore character [_] are valid.
         /// </summary>
         /// <param name="name">A database table name to check.</param>
-        /// <returns>True if the valdiation was successfull, otherwise false.</returns>
+        /// <returns>True if the validation was successful, otherwise false.</returns>
         private static bool ValidTableName(string name)
         {
             char[] tmp = name.ToCharArray();
@@ -341,7 +325,7 @@ namespace VPKSoft.ConfLib
         /// <param name="valueName">The value name where the database table name is separated from.</param>
         private void CreateNames(ref string confValue, ref string table, ref string valueName)
         {
-            if (confValue == null || confValue == string.Empty)
+            if (string.IsNullOrEmpty(confValue))
             {
                 throw new ArgumentException("Empty or null string is not allowed.");
             }
@@ -358,12 +342,13 @@ namespace VPKSoft.ConfLib
 
             if (tmp.Length < 2)
             {
-                throw new ArgumentOutOfRangeException("Invalid config value.");
+                // ReSharper disable once NotResolvedInText
+                throw new ArgumentOutOfRangeException(@"Invalid config value.");
             }
 
             if (!ValidTableName(tmp[0]))
             {
-                throw new ArgumentException(string.Format("Invalid setting prefix '{0}'.", tmp[0]));
+                throw new ArgumentException($"Invalid setting prefix '{tmp[0]}'.");
             }
 
             string tmp2 = string.Empty;
@@ -408,14 +393,10 @@ namespace VPKSoft.ConfLib
                         {
                             if (dr.Read())
                             {
-                                if (dr.IsDBNull(0))
-                                {
-                                    configCache.Add(new KeyValuePair<string, string>(table + "/" + valueName, null));
-                                }
-                                else
-                                {
-                                    configCache.Add(new KeyValuePair<string, string>(table + "/" + valueName, UnprotectData((dr[0].ToString()))));
-                                }
+                                configCache.Add(dr.IsDBNull(0)
+                                    ? new KeyValuePair<string, string>(table + "/" + valueName, null)
+                                    : new KeyValuePair<string, string>(table + "/" + valueName,
+                                        UnProtectData((dr[0].ToString()))));
                                 return;
                             }
                         }
@@ -427,7 +408,7 @@ namespace VPKSoft.ConfLib
                 }
             }
 
-            if (autoCreate)
+            if (AutoCreateSettings)
             {
                 using (SQLiteCommand command = new SQLiteCommand(conn))
                 {
@@ -462,18 +443,18 @@ namespace VPKSoft.ConfLib
         /// <param name="defaultValue">A default value for the config entry.</param>
         public void AddValue(string confValue, string defaultValue = null)
         {
-            bool tmp = autoCreate;
+            bool tmp = AutoCreateSettings;
             try
             {
-                autoCreate = true;
+                AutoCreateSettings = true;
                 CreateConfig(ref confValue, false, defaultValue);
             }
-            catch (Exception ex)
+            catch
             {
-                autoCreate = tmp;
-                throw ex;
+                AutoCreateSettings = tmp;
+                throw;
             }
-            autoCreate = tmp;
+            AutoCreateSettings = tmp;
         }
 
         /// <summary>
@@ -531,7 +512,7 @@ namespace VPKSoft.ConfLib
         }
 
         /// <summary>
-        /// Checks if a certaing configuration value exists.
+        /// Checks if a certain configuration value exists.
         /// </summary>
         /// <param name="confValue">A config value to check.</param>
         /// <returns>True if the config value exists, otherwise false.</returns>
@@ -576,12 +557,12 @@ namespace VPKSoft.ConfLib
                 {
                     if (conf.Key == confValue)
                     {
-                        return UnprotectData(conf.Value);
+                        return UnProtectData(conf.Value);
                     }
                 }
-                if (!autoCreate)
+                if (!AutoCreateSettings)
                 {
-                    throw new Exception(string.Format("Config value '{0}' does not exist.", confValue));
+                    throw new Exception($"Config value '{confValue}' does not exist.");
                 }
                 return null;
             }
@@ -602,12 +583,12 @@ namespace VPKSoft.ConfLib
                 {
                     if (conf.Key == confValue)
                     {
-                        return UnprotectData(conf.Value);
+                        return UnProtectData(conf.Value);
                     }
                 }
-                if (!autoCreate)
+                if (!AutoCreateSettings)
                 {
-                    throw new Exception(string.Format("Config value '{0}' does not exist.", confValue));
+                    throw new Exception($"Config value '{confValue}' does not exist.");
                 }
                 return null;
             }
@@ -625,9 +606,10 @@ namespace VPKSoft.ConfLib
                         return;
                     }
                 }
-                if (!autoCreate)
+                if (!AutoCreateSettings)
                 {
-                    throw new Exception(string.Format("Config value '{0}' does not exist.{1}Use AddValue or enable AutoCreateSettings.", confValue, Environment.NewLine));
+                    throw new Exception(
+                        $"Config value '{confValue}' does not exist.{Environment.NewLine}Use AddValue or enable AutoCreateSettings.");
                 }
             }
         }

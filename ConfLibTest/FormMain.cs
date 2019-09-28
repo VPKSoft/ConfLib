@@ -3,7 +3,7 @@
 ConfLib
 
 A library for storing application setting into a SQLite database.
-Copyright (C) 2015 VPKSoft, Petteri Kautonen
+Copyright (C) 2019 VPKSoft, Petteri Kautonen
 
 Contact: vpksoft@vpksoft.net
 
@@ -25,69 +25,87 @@ along with ConfLib.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 using VPKSoft.ConfLib;
 
 namespace ConfLibTest
 {
     public partial class FormMain : Form
     {
-        Conflib cl;
+        private readonly Settings settings;
+
         public FormMain()
         {
             InitializeComponent();
-            cl = new Conflib();
+            var cl = new Conflib();
 
-            // Use auto create
-            cl.AutoCreateSettings = true;
+            settings = new Settings(cl);
 
-            Text = cl["text", "ConfLibTest  © VPKSoft"] + "  " + cl["year", "2015"];
+            settings.RequestTypeConverter += Settings_RequestTypeConverter;
 
-            tbFirstName.Text = cl["texts/" + tbFirstName.Name];
-            tbLastName.Text = cl["texts/" + tbLastName.Name];
+            settings.LoadSettings();
 
-            cbCoding.Checked = cl["bools/" + cbCoding.Name, false.ToString()] == string.Empty ? false : Convert.ToBoolean(cl["bools/" + cbCoding.Name]);
-            cbNerd.Checked = cl["bools/" + cbNerd.Name, false.ToString()] == string.Empty ? false : Convert.ToBoolean(cl["bools/" + cbNerd.Name]);
 
-            if (cl["groupBoxes/" + gbGender.Name, "-1"] != "-1")
+            // ReSharper disable once VirtualMemberCallInConstructor
+            Text = settings.Text + @" " + settings.Year;
+
+            tbFirstName.Text = settings.FirstName;
+            tbLastName.Text = settings.LastName;
+
+            cbCoding.Checked = settings.MasterCoder;
+            cbNerd.Checked = settings.UserIsANerd;
+
+            if (settings.GenderIndex != -1)
             {                
                 foreach (Control c in gbGender.Controls)
                 {
-                    if ((c is RadioButton) && (string)(c as RadioButton).Tag == cl["groupBoxes/" + gbGender.Name])
+                    if ((c is RadioButton radioButton) && (string)radioButton.Tag == settings.GenderIndex.ToString())
                     {
-                        (c as RadioButton).Checked = true;
+                        radioButton.Checked = true;
                         break;
                     }
                 }
             }
 
+            btFavoriteColor.BackColor = settings.FavoriteColor;
+        }
+
+        private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(Color));
+            e.Converter = converter;
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            cl["texts/" + tbFirstName.Name] = "SECURE:" + tbFirstName.Text;
-            cl["texts/" + tbLastName.Name] = tbLastName.Text;
-
-            cl["bools/" + cbCoding.Name] = cbCoding.Checked.ToString();
-            cl["bools/" + cbNerd.Name] = cbNerd.Checked.ToString();
-
-            foreach (Control c in gbGender.Controls)
+            using (settings)
             {
-                if ((c is RadioButton) && (c as RadioButton).Checked)
+                settings.FirstName = tbFirstName.Text;
+                settings.LastName = tbLastName.Text;
+                settings.MasterCoder = cbCoding.Checked;
+                settings.UserIsANerd = cbNerd.Checked;
+                foreach (Control c in gbGender.Controls)
                 {
-                    cl["groupBoxes/" + gbGender.Name] = (c as RadioButton).Tag.ToString();
-                    break;
+                    if ((c is RadioButton radioButton) && radioButton.Checked)
+                    {
+                        settings.GenderIndex = Convert.ToInt32(radioButton.Tag);
+                        break;
+                    }
                 }
-            }
 
+                settings.FavoriteColor = btFavoriteColor.BackColor;
+            }
+        }
+
+        private void BtFavoriteColor_Click(object sender, EventArgs e)
+        {
+            cdFavouriteColor.Color = btFavoriteColor.BackColor;
+            if (cdFavouriteColor.ShowDialog() == DialogResult.OK)
+            {
+                btFavoriteColor.BackColor = cdFavouriteColor.Color;
+            }
         }
     }
 }

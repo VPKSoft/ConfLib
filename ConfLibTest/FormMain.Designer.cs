@@ -1,30 +1,4 @@
-﻿#region License
-/*
-ConfLib
-
-A library for storing application setting into a SQLite database.
-Copyright (C) 2015 VPKSoft, Petteri Kautonen
-
-Contact: vpksoft@vpksoft.net
-
-This file is part of ConfLib.
-
-ConfLib is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-ConfLib is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with ConfLib.  If not, see <http://www.gnu.org/licenses/>.
-*/
-#endregion
-
-namespace ConfLibTest
+﻿namespace ConfLibTest
 {
     partial class FormMain
     {
@@ -62,9 +36,11 @@ namespace ConfLibTest
             this.cbNerd = new System.Windows.Forms.CheckBox();
             this.cbCoding = new System.Windows.Forms.CheckBox();
             this.gbGender = new System.Windows.Forms.GroupBox();
-            this.rbMale = new System.Windows.Forms.RadioButton();
-            this.rbFemale = new System.Windows.Forms.RadioButton();
             this.rbOther = new System.Windows.Forms.RadioButton();
+            this.rbFemale = new System.Windows.Forms.RadioButton();
+            this.rbMale = new System.Windows.Forms.RadioButton();
+            this.btFavoriteColor = new System.Windows.Forms.Button();
+            this.cdFavouriteColor = new System.Windows.Forms.ColorDialog();
             this.gbGender.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,17 +108,17 @@ namespace ConfLibTest
             this.gbGender.TabStop = false;
             this.gbGender.Text = "Gender";
             // 
-            // rbMale
+            // rbOther
             // 
-            this.rbMale.AutoSize = true;
-            this.rbMale.Location = new System.Drawing.Point(16, 19);
-            this.rbMale.Name = "rbMale";
-            this.rbMale.Size = new System.Drawing.Size(48, 17);
-            this.rbMale.TabIndex = 0;
-            this.rbMale.TabStop = true;
-            this.rbMale.Tag = "0";
-            this.rbMale.Text = "Male";
-            this.rbMale.UseVisualStyleBackColor = true;
+            this.rbOther.AutoSize = true;
+            this.rbOther.Location = new System.Drawing.Point(263, 19);
+            this.rbOther.Name = "rbOther";
+            this.rbOther.Size = new System.Drawing.Size(51, 17);
+            this.rbOther.TabIndex = 2;
+            this.rbOther.TabStop = true;
+            this.rbOther.Tag = "2";
+            this.rbOther.Text = "Other";
+            this.rbOther.UseVisualStyleBackColor = true;
             // 
             // rbFemale
             // 
@@ -156,23 +132,39 @@ namespace ConfLibTest
             this.rbFemale.Text = "Female";
             this.rbFemale.UseVisualStyleBackColor = true;
             // 
-            // rbOther
+            // rbMale
             // 
-            this.rbOther.AutoSize = true;
-            this.rbOther.Location = new System.Drawing.Point(263, 19);
-            this.rbOther.Name = "rbOther";
-            this.rbOther.Size = new System.Drawing.Size(51, 17);
-            this.rbOther.TabIndex = 2;
-            this.rbOther.TabStop = true;
-            this.rbOther.Tag = "2";
-            this.rbOther.Text = "Other";
-            this.rbOther.UseVisualStyleBackColor = true;
+            this.rbMale.AutoSize = true;
+            this.rbMale.Location = new System.Drawing.Point(16, 19);
+            this.rbMale.Name = "rbMale";
+            this.rbMale.Size = new System.Drawing.Size(48, 17);
+            this.rbMale.TabIndex = 0;
+            this.rbMale.TabStop = true;
+            this.rbMale.Tag = "0";
+            this.rbMale.Text = "Male";
+            this.rbMale.UseVisualStyleBackColor = true;
+            // 
+            // btFavoriteColor
+            // 
+            this.btFavoriteColor.Location = new System.Drawing.Point(12, 137);
+            this.btFavoriteColor.Name = "btFavoriteColor";
+            this.btFavoriteColor.Size = new System.Drawing.Size(362, 23);
+            this.btFavoriteColor.TabIndex = 7;
+            this.btFavoriteColor.Text = "Favorite Color";
+            this.btFavoriteColor.UseVisualStyleBackColor = true;
+            this.btFavoriteColor.Click += new System.EventHandler(this.BtFavoriteColor_Click);
+            // 
+            // cdFavouriteColor
+            // 
+            this.cdFavouriteColor.AnyColor = true;
+            this.cdFavouriteColor.FullOpen = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(386, 143);
+            this.ClientSize = new System.Drawing.Size(386, 172);
+            this.Controls.Add(this.btFavoriteColor);
             this.Controls.Add(this.gbGender);
             this.Controls.Add(this.cbCoding);
             this.Controls.Add(this.cbNerd);
@@ -206,7 +198,8 @@ namespace ConfLibTest
         private System.Windows.Forms.RadioButton rbOther;
         private System.Windows.Forms.RadioButton rbFemale;
         private System.Windows.Forms.RadioButton rbMale;
-
+        private System.Windows.Forms.Button btFavoriteColor;
+        private System.Windows.Forms.ColorDialog cdFavouriteColor;
     }
 }
 
