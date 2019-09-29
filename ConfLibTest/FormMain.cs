@@ -88,6 +88,8 @@ namespace ConfLibTest
         {
             using (settings)
             {
+                settings.RequestTypeConverter -= Settings_RequestTypeConverter;
+
                 settings.FirstName = tbFirstName.Text;
                 settings.LastName = tbLastName.Text;
                 settings.MasterCoder = cbCoding.Checked;
