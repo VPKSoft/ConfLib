@@ -64,7 +64,7 @@ public partial class FormMain : Form
         // load the settings..
         settings.LoadSettings();
 ```
-No for the type converter:
+Now for the type converter:
 ```C#
 // get a type converter "from-to-from" string conversion for more complex types..
 private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
