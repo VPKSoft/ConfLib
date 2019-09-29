@@ -2,7 +2,7 @@
 A library to store application configuration/settings into a SQLite database.
 
 ## Using auto-properties
-To ease up saving and loading settings is to use auto-properties and TypeConverter class for more complex types such as System.Drawing.Color. To get the auto-properties to be notified of a change in a value the library uses [PropertyChanged.Fody](https://github.com/Fody/PropertyChanged) library, which injects the auto-properties to raise [PropertyChanged](docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged) event - but this is just the internal logic.
+To ease up saving and loading settings is to use auto-properties and TypeConverter class for more complex types such as System.Drawing.Color. To get the auto-properties to be notified of a change in a value the library uses [PropertyChanged.Fody](https://github.com/Fody/PropertyChanged) library, which injects the auto-properties to raise [PropertyChanged](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged) event - but this is just the internal logic.
 
 ## Constructing a settings class
 To implement the settings class to be as simple as possible we use the SettingsBase class to inherit the settings class from.
@@ -76,7 +76,7 @@ private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs
 ```
 Do note that the library can cache TypeConverter instances if allowed: `settings.CacheTypeConverters = true;`
 
-Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class. Ps. Remember that the class inherits from [IDisposable](docs.microsoft.com/en-us/dotnet/api/system.idisposable) interface:
+Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class. Ps. Remember that the class inherits from [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable) interface:
 ```C#
 using (settings) // do remember to do this, the IDisposable is just for internal event un-subscription..
 {
@@ -85,7 +85,7 @@ using (settings) // do remember to do this, the IDisposable is just for internal
 ```
 
 ### Security
-The ConfLib can encrypt data using the [ProtectedData](docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata) class.
+The ConfLib can encrypt data using the [ProtectedData](https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata) class.
 ```C#
 [SettingAttribute("indentity/password", typeof(string), true)] // just set the Secure value to true..
 internal string Password { get; set; } = string.Empty;
