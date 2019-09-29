@@ -76,7 +76,13 @@ No for the type converter:
 ```
 Do note that the library can cache TypeConverter instances if allowed: `settings.CacheTypeConverters = true;`
 
-Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class.
+Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class. Ps. Remember that the class inherits from [IDisposable](docs.microsoft.com/en-us/dotnet/api/system.idisposable) interface:
+```C#
+using (settings) // do remember to do this, the IDisposable is just for internal event un-subscription..
+{
+        settings.RequestTypeConverter -= Settings_RequestTypeConverter; // un-subscribe the event..
+}
+```
 
 ### Security
 The ConfLib can encrypt data using the [ProtectedData](docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata) class.
