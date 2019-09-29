@@ -66,7 +66,7 @@ So the Settings class now ready, lets take it into use:
 ```
 No for the type converter:
 ```C#
-        // get a type converter "form-to-from" string conversion for more complex types..
+        // get a type converter "from-to-from" string conversion for more complex types..
         private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
         {
             // just a color so we can assume that a type converter will be found..
