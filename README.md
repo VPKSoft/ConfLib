@@ -80,7 +80,7 @@ Now just use the class by setting or getting the values from the properties mark
 ```C#
 using (settings) // do remember to do this, the IDisposable is just for internal event un-subscription..
 {
-        settings.RequestTypeConverter -= Settings_RequestTypeConverter; // un-subscribe the event..
+    settings.RequestTypeConverter -= Settings_RequestTypeConverter; // un-subscribe the event..
 }
 ```
 
