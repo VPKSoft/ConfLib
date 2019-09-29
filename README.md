@@ -44,45 +44,51 @@ namespace YourApp
 ```
 So the Settings class now ready, lets take it into use:
 ```C#
-    // just a form..
-    public partial class FormMain : Form
+// just a form..
+public partial class FormMain : Form
+{
+    // the settings..
+    private readonly Settings settings;
+
+    // the constructor..
+    public FormMain()
     {
-        // the settings..
-        private readonly Settings settings;
+        InitializeComponent();
 
-        // the constructor..
-        public FormMain()
-        {
-            InitializeComponent();
+        // create the settings class..
+        settings = new Settings(new Conflib()); // the Conflib will create a folder and a SQLite database automatically to %LOCALAPPDATA%\YourApp
 
-            // create the settings class..
-            settings = new Settings(new Conflib()); // the Conflib will create a folder and a SQLite database automatically to %LOCALAPPDATA%\YourApp
+        // subscribe the event to allow the Settings class to request a TypeConverter for more complex types..
+        settings.RequestTypeConverter += Settings_RequestTypeConverter;
 
-            // subscribe the event to allow the Settings class to request a TypeConverter for more complex types..
-            settings.RequestTypeConverter += Settings_RequestTypeConverter;
-
-            // load the settings..
-            settings.LoadSettings();
+        // load the settings..
+        settings.LoadSettings();
 ```
 No for the type converter:
 ```C#
-        // get a type converter "from-to-from" string conversion for more complex types..
-        private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
-        {
-            // just a color so we can assume that a type converter will be found..
-            var converter = TypeDescriptor.GetConverter(e.TypeOfConverter);
-            e.Converter = converter; // return the TypeConverter to the class instance via the event arguments..
-        }
+// get a type converter "from-to-from" string conversion for more complex types..
+private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
+{
+    // just a color so we can assume that a type converter will be found..
+    var converter = TypeDescriptor.GetConverter(e.TypeOfConverter);
+    e.Converter = converter; // return the TypeConverter to the class instance via the event arguments..
+}
 ```
 Do note that the library can cache TypeConverter instances if allowed: `settings.CacheTypeConverters = true;`
 
-Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class.
+Now just use the class by setting or getting the values from the properties marked with the SettingAttribute attribute class. Ps. Remember that the class inherits from [IDisposable](docs.microsoft.com/en-us/dotnet/api/system.idisposable) interface:
+```C#
+using (settings) // do remember to do this, the IDisposable is just for internal event un-subscription..
+{
+    settings.RequestTypeConverter -= Settings_RequestTypeConverter; // un-subscribe the event..
+}
+```
 
 ### Security
 The ConfLib can encrypt data using the [ProtectedData](docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata) class.
 ```C#
-        [SettingAttribute("indentity/password", typeof(string), true)] // just set the Secure value to true..
-        internal string Password { get; set; } = string.Empty;
+[SettingAttribute("indentity/password", typeof(string), true)] // just set the Secure value to true..
+internal string Password { get; set; } = string.Empty;
 ```
 
 ### The generated database
