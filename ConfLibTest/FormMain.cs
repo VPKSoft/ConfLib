@@ -32,21 +32,25 @@ using VPKSoft.ConfLib;
 
 namespace ConfLibTest
 {
+    // just a form..
     public partial class FormMain : Form
     {
+        // the settings..
         private readonly Settings settings;
 
+        // the constructor..
         public FormMain()
         {
             InitializeComponent();
-            var cl = new Conflib();
 
-            settings = new Settings(cl);
+            // create the settings class..
+            settings = new Settings(new Conflib()); // the Conflib will create a folder and a SQLite database automatically to %LOCALAPPDATA%\YourApp
 
+            // subscribe the event to allow the Settings class to request a TypeConverter for more complex types..
             settings.RequestTypeConverter += Settings_RequestTypeConverter;
 
+            // load the settings..
             settings.LoadSettings();
-
 
             // ReSharper disable once VirtualMemberCallInConstructor
             Text = settings.Text + @" " + settings.Year;
@@ -72,10 +76,12 @@ namespace ConfLibTest
             btFavoriteColor.BackColor = settings.FavoriteColor;
         }
 
+        // get a type converter "from-to-from" string conversion for more complex types..
         private void Settings_RequestTypeConverter(object sender, TypeConverterEventArgs e)
         {
-            var converter = TypeDescriptor.GetConverter(typeof(Color));
-            e.Converter = converter;
+            // just a color so we can assume that a type converter will be found..
+            var converter = TypeDescriptor.GetConverter(e.TypeOfConverter);
+            e.Converter = converter; // return the TypeConverter to the class instance via the event arguments..
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)

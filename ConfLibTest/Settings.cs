@@ -43,8 +43,8 @@ namespace ConfLibTest
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.
         /// </summary>
-        /// <param name="conflib">The conflib.</param>
-        public Settings(Conflib conflib) : base(conflib)
+        /// <param name="confLib">An instance to a ConfLib class.</param>
+        public Settings(Conflib confLib) : base(confLib)
         {
         }
 
