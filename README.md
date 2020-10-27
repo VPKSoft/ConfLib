@@ -1,6 +1,8 @@
 # ConfLib
 A library to store application configuration/settings into a SQLite database.
 
+[![Nuget](https://img.shields.io/nuget/v/VPKSoft.ConfLib)](https://www.nuget.org/packages/VPKSoft.ConfLib/)
+
 ## Using auto-properties
 To ease up saving and loading settings is to use auto-properties and TypeConverter class for more complex types such as System.Drawing.Color. To get the auto-properties to be notified of a change in a value the library uses [PropertyChanged.Fody](https://github.com/Fody/PropertyChanged) library, which injects the auto-properties to raise [PropertyChanged](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged) event - but this is just the internal logic.
 
@@ -98,6 +100,7 @@ _Database from the [ConfLibTest sample application](https://github.com/VPKSoft/C
 ![image](https://user-images.githubusercontent.com/40712699/65828441-a0fd1d00-e2a3-11e9-9457-1941b6fdd8b1.png)
 
 ##### Thanks to
+* [![VPKSoft](https://circleci.com/gh/VPKSoft/ConfLib.svg?style=shield)](https://app.circleci.com/pipelines/github/VPKSoft/ConfLib) 
 * [JetBrains](http://www.jetbrains.com) for their open source license(s).
 
 ![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)
