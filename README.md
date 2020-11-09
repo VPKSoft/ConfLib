@@ -99,8 +99,9 @@ The software genrates tables and adds rows to the tables automatically:
 _Database from the [ConfLibTest sample application](https://github.com/VPKSoft/ConfLib/tree/master/ConfLibTest):_
 ![image](https://user-images.githubusercontent.com/40712699/65828441-a0fd1d00-e2a3-11e9-9457-1941b6fdd8b1.png)
 
-##### Thanks to
+### Thanks to
+* [JetBrains](https://www.jetbrains.com/?from=ConfLib) for their open source license(s).
 * [![VPKSoft](https://circleci.com/gh/VPKSoft/ConfLib.svg?style=shield)](https://app.circleci.com/pipelines/github/VPKSoft/ConfLib) 
-* [JetBrains](http://www.jetbrains.com) for their open source license(s).
 
-![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)
+
+[![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)](https://www.jetbrains.com/?from=ConfLib)
