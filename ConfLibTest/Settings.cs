@@ -60,7 +60,7 @@ namespace ConfLibTest
         [SettingAttribute("texts/tbLastName", typeof(string))]
         internal string LastName { get; set; } = string.Empty;
 
-        [SettingAttribute("bools/cbCoding", typeof(bool))]
+        [SettingAttribute("bools/cbCoding", typeof(bool), true)]
         internal bool MasterCoder { get; set; }
 
         [SettingAttribute("bools/cbNerd", typeof(bool))]

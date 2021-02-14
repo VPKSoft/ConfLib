@@ -2,15 +2,15 @@
   <PropertyGroup>
     <RootNamespace>VPKSoft.ConfLib</RootNamespace>
     <AssemblyName>VPKSoft.ConfLib</AssemblyName>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net5.0-windows;net461</TargetFrameworks>
     <AssemblyTitle>ConfLib</AssemblyTitle>
     <Company>VPKSoft</Company>
     <Product>ConfLib</Product>
     <Description>A library to store application configuration into a SQLite database</Description>
-    <Copyright>Copyright © VPKSoft 2020</Copyright>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <Copyright>Copyright © VPKSoft 2021</Copyright>
+    <Version>1.0.4</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
     <DocumentationFile>bin\$(Configuration)\VPKSoft.ConfLib.xml</DocumentationFile>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -22,6 +22,7 @@
     <PostBuildEvent />
     <PostBuildEvent />
     <PostBuildEvent />
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugType>full</DebugType>
@@ -54,7 +55,7 @@
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.6" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data.DataSetExtensions" />
