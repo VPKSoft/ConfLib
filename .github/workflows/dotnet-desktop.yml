@@ -18,9 +18,9 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: ScintillaNetPrinting.sln
-      App_Project_Directory: ScintillaNetPrinting
-      App_Project_Path: ScintillaNetPrinting\ScintillaNetPrinting.csproj
+      Solution_Name: ConfLib.sln
+      App_Project_Directory: ConfLib
+      App_Project_Path: ConfLib\ConfLib.csproj
 
       NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
       NUGETAPI: ${{ secrets.NUGETAPI }}      
@@ -50,7 +50,7 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
-    # Create the ScintillaNetPrinting app package by building and packaging the NuGet
+    # Create the ConfLib app package by building and packaging the NuGet
     - name: Create the ConfLib NuGet package
       run: msbuild $env:App_Project_Path /p:Configuration=$env:Configuration
 
