@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>VPKSoft.ConfLib</RootNamespace>
     <AssemblyName>VPKSoft.ConfLib</AssemblyName>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0-windows;net6-windows</TargetFrameworks>
     <AssemblyTitle>ConfLib</AssemblyTitle>
     <Company>VPKSoft</Company>
     <Product>ConfLib</Product>
