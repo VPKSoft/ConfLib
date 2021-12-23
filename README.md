@@ -101,7 +101,8 @@ _Database from the [ConfLibTest sample application](https://github.com/VPKSoft/C
 
 ### Thanks to
 * [JetBrains](https://www.jetbrains.com/?from=ConfLib) for their open source license(s).
-* [![VPKSoft](https://circleci.com/gh/VPKSoft/ConfLib.svg?style=shield)](https://app.circleci.com/pipelines/github/VPKSoft/ConfLib) 
+* [![.NET Desktop](https://github.com/VPKSoft/ConfLib/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/VPKSoft/ConfLib/actions/workflows/dotnet-desktop.yml)
+
 
 
 [![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)](https://www.jetbrains.com/?from=ConfLib)
